@@ -1,0 +1,26 @@
+\noindent \textred{5.}
+The customer flow at a grocery store can be viewed as a Poisson process, i.e.
+\[
+    P\left(\text{\underline{The \# of customer arrivals in $(0, t)$} = $k$}\right) = e^{-\lambda t} \frac{(\lambda t)^k}{k!}
+\]
+Suppose the probability that in two minutes at least one customer arrives equals to 0.3.
+\begin{enumerate}
+    \item[(1)] Find $\lambda$. \\
+    \myAnswer{
+    $P\left(\text{\underline{The \# of customer arrivals in $(0, 2)$} = $0$}\right) = e^{-2\lambda} \frac{(2\lambda)^0}{0!} = 1 - 0.3$ \\
+    $\Rightarrow \lambda = -\ln{0.7}/2 \approx \underline{0.178}$
+    }
+    \item[(2)] Find Find the probability that in 3 minutes no customer comes. \\
+    \myAnswer{
+    $P\left(\text{\underline{The \# of customer arrivals in $(0, 3)$} = $0$}\right) = e^{-3\lambda} \frac{(3\lambda)^0}{0!}  \approx \underline{0.586}$
+    }
+    \item[(3)] Find the probability that in 10 minutes at least two customers will arrive. \\
+    \myAnswer{
+    $1 - \sum_{i=0,1} P\left(\text{\underline{The \# of customer arrivals in $(0, 10)$} = $i$}\right)$ \\
+    $= 1 - e^{-10\lambda} \left[\frac{(10\lambda)^0}{0!} + \frac{(10\lambda)^1}{1!}\right] \approx \underline{0.531}$
+    }
+    \item[(4)] Find the probability that in one minute exactly one customer will arrive. \\
+    \myAnswer{
+    $P\left(\text{\underline{The \# of customer arrivals in $(0, 1)$} = $1$}\right) = e^{-\lambda} \frac{(\lambda)^1}{1!}  \approx \underline{0.149}$ \\
+    }
+\end{enumerate}

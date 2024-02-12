@@ -1,0 +1,11 @@
+\noindent \textred{1.}
+\textbf{(4 points)} \textit{Expressivity of neural networks}. Recall that the functional form for a
+single neuron is given by $y = \sigma(\langle w, x\rangle + b, 0)$, where $x$ is the input and $y$ is the output. In this exercise, assume that $x$ and $y$ are 1-dimensional (i.e., they are both just real-valued scalars) and $\sigma$ is the unit step activation. We will use multiple layers of such neurons to approximate pretty much any function $f$. There is no learning/training required for this problem; you should be able to guess/derive the weights and biases of the networks by hand.
+
+\begin{enumerate}
+    \item[a.] (1pt) A \textit{box} function with height $h$ and width $\sigma$ is the function $f(x) = h$ for $0 < x < \sigma$ and 0 otherwise. Show that a simple neural network with 2 hidden neurons with step activations can realize this function. Draw this network and identify all the weights and biases. (Assume that the output neuron only sums up inputs and does not have a nonlinearity.)
+    \item[b.] (2pts) Now suppose that $f$ is \textit{any arbitrary, smooth, bounded} function defined over an interval $[-B, B]$. (You can ignore what happens to the function outside this interval, or just assume it is zero). Use part a to show that this function can be closely approximated by a neural network with a hidden layer of neurons. You don’t need a rigorous mathematical proof here; a handwavy argument or even a figure is okay here, as long as you convey the right intuition.
+    \item[c.] (1pt) Do you think the argument in part b can be extended to the case of $d$-dimensional inputs? (i.e., where the input $x$ is a vector – think of it as an image, or text query, etc). If yes, comment on potential practical issues involved in defining such networks. If not, explain why not.
+\end{enumerate}
+
+\noindent \myAnswer{}

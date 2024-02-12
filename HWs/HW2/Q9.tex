@@ -1,0 +1,16 @@
+\noindent \textred{9.}
+The probability that a driver will have an accident in 1 month equals 0.03. Find the probability that in 100 months he will have three accidents. \\
+\myAnswer{
+Assume that the number of accident within a period follows Poisson distribution, 
+\[
+    P\left(\text{\underline{The \# of accident in $(0, t)$ months} = $k$}\right) = e^{-\lambda t} \frac{(\lambda t)^k}{k!},
+\]
+Therefore, 
+\[
+    P\left(\text{\underline{The \# of accident in $(0, 1)$ months} = $1$}\right) = e^{-\lambda} \frac{(\lambda)^1}{1!} = 0.03 \Rightarrow \lambda \approx 0.031
+\]
+So the probability that in 100 months he will have three accidents is
+\[
+    P\left(\text{\underline{The \# of accident in $(0, 100)$ months} = $3$}\right) = e^{-100\lambda} \frac{(100\lambda)^3}{3!} = \approx \underline{0.2237}
+\]
+}
