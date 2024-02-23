@@ -3,7 +3,20 @@
 \[
     J_{ij} = \frac{\partial y_i}{\partial z_j} = y_i (\delta_{ij} - y_j),
 \]
-where $\delta_{ij}$ is the Dirac delta, i.e., 1 if $i = j$ and 0 else. \textit{Hint: Your algebra could be simplified if you try computing the log derivative, $\frac{\partial \log y_i}{\partial z_j}$.}
-
+where $\delta_{ij}$ is the Dirac delta, i.e., 1 if $i = j$ and 0 else. \textit{Hint: Your algebra could be simplified if you try computing the log derivative, $\frac{\partial \log y_i}{\partial z_j}$.} \\
 \noindent \myAnswer{
+From the definition of softmax, we know that
+\[
+    y_i = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}} 
+    \Rightarrow \log y_i = z_i - \log\left(\sum_{j=1}^{n} e^{z_j}\right)
+\]
+Therefore
+\[
+    \frac{\partial \log y_i}{\partial z_j} = \delta_{ij} - \frac{e^{z_j}}{\sum_{j=1}^{n} e^{z_j}} = \delta_{ij} - y_j
+\]
+We also know that $\frac{\partial \log y_i}{\partial z_j} = \frac{1}{y_i} \frac{\partial y_i}{\partial z_j}$. Therefore
+\[
+    \frac{\partial \log y_i}{\partial z_j} = \frac{1}{y_i} \frac{\partial y_i}{\partial z_j} = \delta_{ij} - y_j
+    \Rightarrow J_{ij} = \frac{\partial y_i}{\partial z_j} = y_i (\delta_{ij} - y_j)
+\]
 }
