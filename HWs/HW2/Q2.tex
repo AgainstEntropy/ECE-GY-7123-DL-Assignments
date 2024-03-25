@@ -1,43 +1,61 @@
 \noindent \textred{2.} 
-{Given $P(X_1 = 0) = 0.2$, $P(X_1 = 1) = 0.8$ and for all $1\leq k \leq n$,
-\begin{figure}
-    \centering
-    \includegraphics[width=0.6\linewidth]{HWs//HW2//figures/2.png}
-\end{figure}
+\textbf{(3 points)} \textit{Understanding self-attention}. Let us assume the basic definition of self-attention (without any weight matrices), where all the queries, keys, and values are the data points themselves (\ie, $x_i = q_i = k_i = v_i$). We will see how self-attention lets the network select different parts of the data to be the ``content" (value) and other parts to determine where to ``pay attention" (queries and keys).
+Consider 4 orthogonal ``base” vectors all of equal $\ell_2$ norm $a, b, c, d$. (Suppose that their norm is $\beta$, which is some very, very large number.) Out of these base vectors, construct 3 tokens:
 \begin{align*}
-    P(X_{k+1} = 0 | X_k = 0) = 0.6, P(X_{k+1} = 1 | X_k = 0) = 0.4 \\
-    P(X_{k+1} = 0 | X_k = 1) = 0.3, P(X_{k+1} = 1 | X_k = 1) = 0.7
+    x_1 &= d + b, \\
+    x_2 &= a, \\
+    x_3 &= c + b.
 \end{align*}
-}
-\begin{enumerate}
-    \item[(a)] Find $P(X_2 = 1)$.
+\begin{enumerate}[a.]
+    \item (0.5 points) What are the norms of $x_1, x_2, x_3$?
     \myAnswer{
     \begin{align*}
-        P(X_2 = 1) &= P(X_2 = 1 | X_1 = 0) \cdot P(X_1 = 0) + P(X_2 = 1 | X_1 = 1) \cdot P(X_1 = 1) \\
-        &= 0.4 \times 0.2 + 0.7 \times 0.8 = \underline{0.64}
+        || x_1 ||_2 &= \sqrt{x_1 \cdot x_1} = \sqrt{(d+b) \cdot (d+b)} = \sqrt{d^2 + b^2} = \sqrt{2} \beta \\
+        || x_2 ||_2 &= \sqrt{x_2 \cdot x_2} = \beta \\
+        || x_3 ||_2 &= \sqrt{x_3 \cdot x_3} = \sqrt{2} \beta
     \end{align*}
     }
-    \item[(b)] Find $P(X_3 = 1)$. 
+    \item (2 points) Compute $(y_1, y_2, y_3)$ = Self-attention $(x_1, x_2, x_3)$. Identify which tokens (or combinations of tokens) are approximated by the outputs $y_1, y_2, y_3$. \\
     \myAnswer{
-    \begin{align*}
-        P(X_3 = 1) &= P(X_3 = 1 | X_2 = 0) \cdot P(X_2 = 0) + P(X_3 = 1 | X_2 = 1) \cdot P(X_2 = 1) \\
-        &= 0.4 \times (1 - 0.64) + 0.7 \times 0.64 = \underline{0.592}
-    \end{align*}
+    To compute the result of Self-attention operation, we first compute the dot-product result
+    \[
+        w_{ij} = q_i^T \cdot k_j = x_i^T \cdot x_j
+        \quad \Longrightarrow \quad
+        w = \left(
+        \begin{array}{ccc}
+            2 \beta^2 & 0 & \beta^2 \\
+            0 & \beta^2 & 0 \\
+            \beta^2 & 0 & 2 \beta^2
+        \end{array}
+        \right).
+    \]
+    Then we can calculated the attention map after Softmax operation
+    \[
+        W = \mathrm{Softmax}(w) = 
+        \left(
+        \begin{array}{ccc}
+            \frac{1}{1 + e^{-\beta^2}} & 0 & \frac{1}{1 + e^{\beta^2}} \\
+            0 & 1 & 0 \\
+            \frac{1}{1 + e^{\beta^2}} & 0 & \frac{1}{1 + e^{-\beta^2}}
+        \end{array}
+        \right)
+        \approx
+        \left(
+        \begin{array}{ccc}
+            1 - \alpha & 0 & \alpha \\
+            0 & 1 & 0 \\
+            \alpha & 0 & 1 - \alpha
+        \end{array}
+        \right),
+    \]
+    where $\alpha = e^{-\beta^2}$ is a very small number. The above approximation is due to the very large $\beta$. Then we can compute the final outputs as
+    \[
+        y_i = \sum_j W_{ij} v_j \Longrightarrow (y_1, y_2, y_3) \approx (d+b+\alpha(c-d), a, c+b+\alpha(d-c)) \approx (x_1, x_2, x_3).
+    \]
+    Therefore, the outputs actually approximate the original input tokens.
     }
-    \item[(c)] Find $P(X_1 = 0 | X_3 = 1)$. 
+    \item (0.5 points) Using the above example, describe in a couple of sentences how self-attention that allows networks to approximately ``copy" an input value to the output. \\
     \myAnswer{
-    \begin{align*}
-        P(X_1 = 0 | X_3 = 1) &= \frac{P(X_3 = 1 | X_1 = 0) \cdot P(X_1 = 0)}{P(X_3 = 1)} \\
-        &= \frac{\sum_{i=0,1}(P(X_3 = 1 | X_2 = i) \cdot P(X_2 = i | X_1 = 0)) \cdot P(X_1 = 0)}{P(X_3 = 1)} \\
-        &= \frac{(0.4\times 0.6 + 0.7\times 0.4) \times 0.2}{0.592} \approx \underline{0.223}
-    \end{align*}
-    }
-    \item[(d)] Find $\lim_{n\rightarrow \infty} P(X_n = 0)$. \\
-    \myAnswer{
-    When $n\rightarrow \infty$, $P(X_n = 0) = P(X_{n-1} = 0)$. \\ Let $P(X_n = 0) = P(X_{n-1} = 0) = x$, we have
-    \begin{align*}
-        P(X_n = 0) &= P(X_n = 0 | X_{n-1} = 0) \cdot P(X_{n-1} = 0) + P(X_n = 0 | X_{n-1} = 1) \cdot P(X_{n-1} = 1) \\ 
-        &= 0.6 x + 0.3 (1 - x) = x \Rightarrow x = 3/7 \approx \underline{0.4286}
-    \end{align*}
+    If one token has very small similarity (measured with cosine similarity or dot-product similarity), in attention map this token will be assigned very small scores with all other tokens. Thus, this token will be approximately ``copied" from input to output.
     }
 \end{enumerate}

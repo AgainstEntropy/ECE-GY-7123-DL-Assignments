@@ -1,19 +1,19 @@
+% refer to https://spaces.ac.cn/archives/7546
 \noindent \textred{3.} 
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.5\linewidth]{HWs//HW2//figures/3.png}
-\end{figure}
-\begin{enumerate}
-    \item[(1)] Find and draw $f(x)$. \\
-    \myAnswer{
-    $f(x) = \underline{0.25[\delta(x+2) + \delta(x+1) + u(x) - u(x-2)]}$ \\
-    \includegraphics[width=0.5\linewidth]{HWs//HW2//figures/3-1.png}
-    }
-    \item[(2)] $E\{X\} = \int_{-\infty}^{\infty} x f(x) dx$. Find $E\{X\}$. \\
-    \myAnswer{
-    \begin{align*}
-        E\{X\} &= 0.25 \left\{ \int_{-\infty}^{\infty} x \delta(x+2) dx + \int_{-\infty}^{\infty} x \delta(x+1) dx + \int_{-\infty}^{\infty} x [u(x) - u(x-2)] dx] \right\} \\
-        &= 0.25 \times [ (-2) + (-1) + 2 ] = \underline{-0.25}
-    \end{align*}
-    }
-\end{enumerate}
+\textbf{(2 points)} \textit{Attention! My code takes too long.} In class, we showed that computing a regular self-attention layer takes $O(T^2)$ running time for an input with $T$ tokens. One alternative is to use ``linear self-attention". In the simplest form, this is identical to the standard dot-product self-attention discussed in the class and lecture notes, except that the exponentials in the rowwise-softmax operation
+$\mathrm{softmax}(QK)$ are dropped; we just pretend all dot-products are positive and normalize as usual. Argue that such this type of attention mechanism avoids the quadratic dependence on $T$ and in fact can be computed in $O(T)$ time. \\
+\myAnswer{
+In self-attention, we have
+\[
+    Q = X \cdot W_Q \in \mathbb{R}^{T\times d}, \quad K = X \cdot W_K \in \mathbb{R}^{T\times d}, \quad X \cdot W_V \cdot X \in \mathbb{R}^{T\times d},
+\]
+where $T$ is the length of token sequence and $d$ is the projection dimension. If there is no softmax operation, the self-attention will become
+\[
+    \mathrm{Attention}(Q, K, V) = \frac{Q \cdot K^T}{\sqrt{d}} \cdot V.
+\]
+Considering the commutative law of matrix multiplication, we change simply rewrite the above ``linear self-attention" as
+\[
+    \mathrm{Attention}(Q, K, V) = \frac{1}{\sqrt{d}} Q \cdot (K^T \cdot V),
+\]
+where $(K^T \cdot V) \in \mathbb{R}^{d\times d}$. When $d \ll T$ is a constant, the computational complexity will be dominated by sequence length $T$, and the total complexity $O(T) + O(d^2)$ will become $O(T)$.
+}
